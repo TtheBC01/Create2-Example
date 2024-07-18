@@ -15,4 +15,8 @@ contract Vault is Initializable {
         require(owner == msg.sender);
         owner.transfer(address(this).balance);
     }
+
+    function getOwner() public view returns (address) {
+        return owner;
+    }
 }

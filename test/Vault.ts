@@ -30,7 +30,7 @@ describe("Vault", function () {
     it("Should set the right unlockTime", async function () {
       const { vaultFactory, owner } = await loadFixture(deployVaultFactory);
 
-      expect(await vaultFactory.read.computeAddress(['TtheBC01'])).to.equal('0x8C0dD67e5e5b7394eD45715BB94a6A59cee8E63c');
+      expect(await vaultFactory.read.computeAddress(['TtheBC01'])).to.equal('0xCB5bF197214B12b47e173fa0A991d050D87Bb34d');
     });
 
     it("Deploy Vault and check event", async function () {
@@ -43,7 +43,20 @@ describe("Vault", function () {
       // get the withdrawal events in the latest block
       const deploymentEvents = await vaultFactory.getEvents.VaultCreated();
       expect(deploymentEvents).to.have.lengthOf(1);
-      expect(deploymentEvents[0].args.vault).to.equal('0x8C0dD67e5e5b7394eD45715BB94a6A59cee8E63c');
+      expect(deploymentEvents[0].args.vault).to.equal('0xCB5bF197214B12b47e173fa0A991d050D87Bb34d');
+
+      const vault = await hre.viem.getContractAt("Vault", '0xCB5bF197214B12b47e173fa0A991d050D87Bb34d');
+      expect((await vault.read.getOwner()).toLocaleLowerCase()).to.equal(owner.account.address.toLocaleLowerCase());
+    });
+
+    it("Cannot deploy to the same address twice", async function () {
+      const { vaultFactory, owner, publicClient } =
+        await loadFixture(deployVaultFactory);
+
+      const hash = await vaultFactory.write.deployVault(['TtheBC01', owner.account.address]);
+      await publicClient.waitForTransactionReceipt({ hash });
+
+      await expect(vaultFactory.write.deployVault(['TtheBC01', owner.account.address])).to.be.rejectedWith('Create2FailedDeployment()')
     });
   });
 });
