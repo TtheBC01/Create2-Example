@@ -1,0 +1,32 @@
+{
+  "name": "create2-example",
+  "version": "1.0.0",
+  "description": "minimal example of create2 opcode",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TtheBC01/create2-example.git"
+  },
+  "keywords": [
+    "create2",
+    "solidity"
+  ],
+  "author": "TtheBC01",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TtheBC01/create2-example/issues"
+  },
+  "homepage": "https://github.com/TtheBC01/create2-example#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "hardhat": "^2.22.6"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2",
+    "@openzeppelin/contracts-upgradeable": "^5.0.2"
+  }
+}
