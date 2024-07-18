@@ -58,5 +58,22 @@ describe("Vault", function () {
 
       await expect(vaultFactory.write.deployVault(['TtheBC01', owner.account.address])).to.be.rejectedWith('Create2FailedDeployment()')
     });
+
+    it("Send Eth to the address before its created then withdraw it", async function () {
+      const { vaultFactory, owner, publicClient } =
+        await loadFixture(deployVaultFactory);
+
+      await owner.sendTransaction({
+        to: '0xCB5bF197214B12b47e173fa0A991d050D87Bb34d',
+        value: 1000000000000000000n // 1 ETH
+      })
+
+      const hash = await vaultFactory.write.deployVault(['TtheBC01', owner.account.address]);
+      await publicClient.waitForTransactionReceipt({ hash });
+
+      const vault = await hre.viem.getContractAt("Vault", '0xCB5bF197214B12b47e173fa0A991d050D87Bb34d');
+      await vault.write.withdraw();
+      expect(await publicClient.getBalance({address: vault.address})).to.eql(0n);
+    });
   });
 });
