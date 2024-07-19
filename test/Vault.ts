@@ -3,7 +3,18 @@ import {
 } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
 import { expect } from "chai";
 import hre from "hardhat";
-import { getAddress, parseGwei } from "viem";
+import { keccak256 } from "viem";
+import VaultArtifact from "../artifacts/contracts/Vault.sol/Vault.json";
+
+
+
+// Function to compute CREATE2 address
+function computeCreate2Address(deployerAddress: string, saltString: string, bytecode: `0x${string}`): string {
+  return `0x${keccak256(
+    `0x${['ff', deployerAddress, keccak256(Buffer.from(saltString)), keccak256(bytecode)].map((x) => x.replace(/0x/, '')).join('')}`
+  ).slice(-40)
+    }`.toLocaleLowerCase();
+}
 
 describe("Vault", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -18,23 +29,27 @@ describe("Vault", function () {
 
     const publicClient = await hre.viem.getPublicClient();
 
+    const create2Address = computeCreate2Address(vaultFactory.address, 'TtheBC01', `0x${VaultArtifact.bytecode.slice(2,)}`);
+    console.log("Vault address:", create2Address);
+
     return {
       vaultFactory,
       owner,
       otherAccount,
       publicClient,
+      create2Address,
     };
   }
 
   describe("Test Vault Factory Functions", function () {
     it("Should set the right unlockTime", async function () {
-      const { vaultFactory, owner } = await loadFixture(deployVaultFactory);
+      const { vaultFactory, create2Address } = await loadFixture(deployVaultFactory);
 
-      expect(await vaultFactory.read.computeAddress(['TtheBC01'])).to.equal('0xCB5bF197214B12b47e173fa0A991d050D87Bb34d');
+      expect((await vaultFactory.read.computeAddress(['TtheBC01'])).toLocaleLowerCase()).to.equal(create2Address);
     });
 
     it("Deploy Vault and check event", async function () {
-      const { vaultFactory, owner, publicClient } =
+      const { vaultFactory, owner, publicClient, create2Address } =
         await loadFixture(deployVaultFactory);
 
       const hash = await vaultFactory.write.deployVault(['TtheBC01', owner.account.address]);
@@ -43,9 +58,9 @@ describe("Vault", function () {
       // get the withdrawal events in the latest block
       const deploymentEvents = await vaultFactory.getEvents.VaultCreated();
       expect(deploymentEvents).to.have.lengthOf(1);
-      expect(deploymentEvents[0].args.vault).to.equal('0xCB5bF197214B12b47e173fa0A991d050D87Bb34d');
+      expect(deploymentEvents[0].args.vault?.toLocaleLowerCase()).to.equal(create2Address);
 
-      const vault = await hre.viem.getContractAt("Vault", '0xCB5bF197214B12b47e173fa0A991d050D87Bb34d');
+      const vault = await hre.viem.getContractAt("Vault", create2Address);
       expect((await vault.read.getOwner()).toLocaleLowerCase()).to.equal(owner.account.address.toLocaleLowerCase());
     });
 
@@ -60,20 +75,20 @@ describe("Vault", function () {
     });
 
     it("Send Eth to the address before its created then withdraw it", async function () {
-      const { vaultFactory, owner, publicClient } =
+      const { vaultFactory, owner, publicClient, create2Address } =
         await loadFixture(deployVaultFactory);
 
       await owner.sendTransaction({
-        to: '0xCB5bF197214B12b47e173fa0A991d050D87Bb34d',
+        to: create2Address.toString(),
         value: 1000000000000000000n // 1 ETH
       })
 
       const hash = await vaultFactory.write.deployVault(['TtheBC01', owner.account.address]);
       await publicClient.waitForTransactionReceipt({ hash });
 
-      const vault = await hre.viem.getContractAt("Vault", '0xCB5bF197214B12b47e173fa0A991d050D87Bb34d');
+      const vault = await hre.viem.getContractAt("Vault", create2Address);
       await vault.write.withdraw();
-      expect(await publicClient.getBalance({address: vault.address})).to.eql(0n);
+      expect(await publicClient.getBalance({ address: vault.address })).to.eql(0n);
     });
   });
 });
