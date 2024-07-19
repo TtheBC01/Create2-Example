@@ -31,6 +31,10 @@ const config: HardhatUserConfig = {
       url: urlOverride,
       accounts: accounts,
     },
+    sepolia: {
+      url: urlOverride,
+      accounts: accounts,
+    },
   }
 };
 
