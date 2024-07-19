@@ -14,7 +14,10 @@ npm install
 cp .env-sample .env
 ```
 
-Then add an RPC endpoint to `ETH_PROVIDER_URL` and also add either a private key or mnemonic with funds if you want to deploy to a testnet. 
+Then add an RPC endpoint to `ETH_PROVIDER_URL` and also add either a private key or mnemonic with funds if you want to deploy to a testnet.
+
+This example has already been deployed to Fuji and Sepolia testnets, so you'll need to change the salt value to something else if you want
+to try that yourself. 
 
 ## Run Tests
 
