@@ -5,6 +5,8 @@ library using Solidity `0.8.24` and OZ v `5.0.2` using the Hardhat framework.
 
 This demo shows how to use Create2 to deploy a vanilla Vault contract as well as an upgradeable Vault via an Upgradeable Beacon.
 
+Check out [CreateX](https://createx.rocks/) while you are researching this topic.
+
 ```sh
 git clone https://github.com/TtheBC01/create2-example.git
 cd create2-example
@@ -17,12 +19,10 @@ npm install
 cp .env-sample .env
 ```
 
-Then add add either a private key or mnemonic with funds if you want to deploy to a testnet.
+Then add add either a private key or mnemonic with testnet funds if you want to deploy to a testnet.
 
 This example has already been deployed to Fuji and Sepolia testnets, so you'll need to change the salt value or the owner address to something else if you want
 to try that yourself. 
-
-Check out [CreateX](https://createx.rocks/) while you are researching this topic.
 
 ## Run Tests
 
