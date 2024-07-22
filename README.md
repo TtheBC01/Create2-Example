@@ -3,9 +3,12 @@
 Updated example of OpenZeppelin [Create2](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Create2.sol) 
 library using Solidity `0.8.24` and OZ v `5.0.2` using the Hardhat framework. 
 
-This demo shows how to use Create2 to deploy a vanilla Vault contract as well as an upgradeable Vault via an Upgradeable Beacon.
+This demo shows how to use Create2 to deploy a vanilla Vault contract with [Create2.deploy](/contracts/VaultFactory.sol#L32) and the [new keyword](/contracts/VaultFactory.sol#L45) as well as an upgradeable Vault via an [Upgradeable Beacon](/contracts/VaultFactory.sol#L56).
 
 Check out [CreateX](https://createx.rocks/) while you are researching this topic.
+
+**IMPORTANT**: 
+If you change anything within a smart contract (even white spaces), you will get different deployment address across networks. 
 
 ```sh
 git clone https://github.com/TtheBC01/create2-example.git
