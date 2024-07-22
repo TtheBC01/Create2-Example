@@ -128,7 +128,7 @@ describe("Vault", function () {
       const { vaultFactory, owner, publicClient } =
         await loadFixture(deployVaultFactory);
 
-      const create2Address = await vaultFactory.read.computeProxyAddress(['TtheBC01'])
+      const create2Address = await vaultFactory.read.computeProxyAddress(['TtheBC01']);
 
       await owner.sendTransaction({
         to: create2Address.toString(),
