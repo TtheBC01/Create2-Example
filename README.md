@@ -35,7 +35,7 @@ npx hardhat test
 
 ## Deploying the Vault Factory
 
-Change the `owner` address in the [Vault.ts](/ignition/modules/VaultFactory.ts#L5) module to an account you control before deploying:
+Change the `owner` address in the [VaultFactory.ts](/ignition/modules/VaultFactory.ts#L5) module to an account you control before deploying:
 
 ```sh
 npx hardhat ignition deploy ignition/modules/VaultFactory.ts --network sepolia --strategy create2
