@@ -35,7 +35,7 @@ npx hardhat test
 
 ## Deploying the Vault Factory
 
-Change the `owner` address in the [Vault.ts](/ignition/modules/Vault.ts#L5) module to an account you control before deploying:
+Change the `owner` address in the [Vault.ts](/ignition/modules/VaultFactory.ts#L5) module to an account you control before deploying:
 
 ```sh
 npx hardhat ignition deploy ignition/modules/VaultFactory.ts --network sepolia --strategy create2
@@ -51,9 +51,9 @@ npx hardhat getProxyAddress --name TtheBC01 --network fuji
 # predict the address of a regular Vault
 npx hardhat getVaultAddress --name TtheBC01 --network fuji
 
-# deploy a proxy Vault (change the owner and name to what you want)
+# deploy a proxy Vault (change the owner and name to something else)
 npx hardhat deployProxy --name TtheBC01 --owner 0x9fEad8B19C044C2f404dac38B925Ea16ADaa2954 --network fuji
-# deploy a regular Vault (change the owner and name to what you want)
+# deploy a regular Vault (change the owner and name to something else)
 npx hardhat deployVault --name TtheBC01 --owner 0x9fEad8B19C044C2f404dac38B925Ea16ADaa2954 --network fuji
 
 # check the owner address of a proxy Vault
