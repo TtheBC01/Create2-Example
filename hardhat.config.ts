@@ -1,9 +1,8 @@
 import type { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
+import "./tasks/utils";
 
 require("dotenv").config();
-
-const urlOverride = process.env.ETH_PROVIDER_URL;
 
 // seed phrase for your HD wallet
 const mnemonic =
@@ -22,17 +21,18 @@ const config: HardhatUserConfig = {
     strategyConfig: {
       create2: {
         // To learn more about salts, see the CreateX documentation
-        salt: "0x0000000000000000000000000000000000000000000000000000000000000001",
+        // the current value is equal to keccak256('create2-example')
+        salt: "0xedb933ff42a22ca1d4b81b32c60e1a665226129bb8e8b488981e9ecbb6f6bac6",
       },
     },
   },
   networks: {
     fuji: {
-      url: urlOverride,
+      url: 'https://rpc.ankr.com/avalanche_fuji',
       accounts: accounts,
     },
     sepolia: {
-      url: urlOverride,
+      url: 'https://rpc.ankr.com/eth_sepolia',
       accounts: accounts,
     },
   }
