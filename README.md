@@ -8,7 +8,7 @@ This demo shows how to use Create2 to deploy a vanilla Vault contract with [Crea
 Check out [CreateX](https://createx.rocks/) while you are researching this topic.
 
 **IMPORTANT**: 
-If you change anything within a smart contract (even white spaces), you will get different deployment address across networks. 
+If you change anything within a smart contract (even white spaces), you will get a different deployment address across networks. 
 
 ```sh
 git clone https://github.com/TtheBC01/create2-example.git
